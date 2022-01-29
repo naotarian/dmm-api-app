@@ -11,14 +11,16 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import NoImage from '../../images/noimage.png';
 import NameHead from '../../config/export.js';
-const Top = () => {
+import { useLocation, useNavigate } from 'react-router-dom'
+const Top = (state) => {
+  const location = useLocation()
   const [item, setItem] = useState([])
+  const selectedInitial = location.state.requestInitial ? location.state.requestInitial : 'あ'
   useEffect(()=>{
     const dmmApiKey = process.env.REACT_APP_DMM_API_KEY
     const dmmAffKey = process.env.REACT_APP_DMM_AFF_ID
-    axios.get(`https://api.dmm.com/affiliate/v3/ActressSearch?api_id=${dmmApiKey}&affiliate_id=${dmmAffKey}&keyword=上原&hits=100&output=json`).then(res => {
+    axios.get(`https://api.dmm.com/affiliate/v3/ActressSearch?api_id=${dmmApiKey}&affiliate_id=${dmmAffKey}&initial=${selectedInitial}&hits=100&output=json`).then(res => {
       const persons = res.data.result.actress;
-      console.log(persons)
       setItem(persons)
     })
   }, [])
@@ -28,7 +30,7 @@ const Top = () => {
     cursor: pointer;
     @media screen and (max-width:450px) { 
         width: 150px;
-        height: 150px;
+        height: 300px;
     }
   `
   const StyledBox = styled(Box)`
@@ -42,6 +44,9 @@ const Top = () => {
     font-size: '0.875rem';
     font-weight: '700';
   `
+  const NameTypo = styled(Typography)`
+    font-size: 1rem;
+  `
   const StyledCardActions = styled(CardActions)`
     justify-content: space-evenly;
   `
@@ -54,7 +59,7 @@ const Top = () => {
   const itemData = item.map((item, index) => {
     let image = ('imageURL' in item) ? item.imageURL.large : NoImage
       return (
-        <StyledCard sx={{ maxWidth: 345 }}>
+        <StyledCard sx={{ maxWidth: 345 }} key={index}>
           <CardMedia
             component="img"
             height="140"
@@ -62,9 +67,9 @@ const Top = () => {
             alt="green iguana"
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <NameTypo gutterBottom variant="h5" component="div">
               No.{item.id}<br />{item.name}
-            </Typography>
+            </NameTypo>
           </CardContent>
           <CardActions>
             <Button color='primary' variant='outlined' size="small">作品</Button>
