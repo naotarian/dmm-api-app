@@ -43,10 +43,19 @@ const ModalLinkBox = styled(Box)`
     border: 2px solid #000;
     box-shadow: 24px;
     padding: 2rem;
+    @media screen and (min-width:1024px) { 
+        width: 30%;
+        text-align: center;
+    }
 `
 const ListInitialButton = styled(Button)`
     min-width: 30px!important;
     margin-right: 2rem;
+    margin-bottom: 2rem;
+    @media screen and (min-width:1024px) { 
+        min-width: 55px!important;
+        height: 55px;
+    }
 `
 
 const SearchArea = () => {
