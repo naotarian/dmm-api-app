@@ -44,7 +44,7 @@ const ModalLinkBox = styled(Box)`
     box-shadow: 24px;
     padding: 2rem;
     @media screen and (min-width:1024px) { 
-        width: 30%;
+        width: 475px;
         text-align: center;
     }
 `

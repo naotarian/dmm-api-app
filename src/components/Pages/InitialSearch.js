@@ -19,76 +19,85 @@ import Grid from '@mui/material/Grid';
 import InitialArray from '../../config/export';
 import Modal from '@mui/material/Modal';
 const StyledCard = styled(Card)`
-    width: 200px;
-    margin-top: 1rem;
-    cursor: pointer;
-    @media screen and (max-width:450px) { 
-        width: 170px;
-        height: 300px;
-    }
-  `
-  const StyledStack = styled(Stack)`
-    width: fit-content;
-    margin: 2rem auto;
-    @media screen and (max-width:450px) { 
-        width: 88%;
-        margin: 2rem auto;
-        justify-content: space-around;
-    }
-  `
-  const ModalLinkBox = styled(Box)`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%)!important;
-    width: 80%;
-    background-color: #fff;
-    border: 2px solid #000;
-    box-shadow: 24px;
-    padding: 2rem;
-    @media screen and (min-width:1024px) { 
-        width: 30%;
-        text-align: center;
-    }
-  `
-  const StyledBox = styled(Box)`
-    background-color: 'grey';
-    color: 'grey';
-    border: '1px solid';
-    border-color: 'grey';
-    border-radius: 2rem;
-    font-size: '0.875rem';
-    font-weight: '700';
-  `
-  const ListInitialButton = styled(Button)`
-    min-width: 30px!important;
-    margin-right: 2rem;
-    margin-bottom: 2rem;
-    @media screen and (min-width:1024px) { 
-        min-width: 55px!important;
-        height: 55px;
-    }
-  `
-  const NameTypo = styled(Typography)`
-    font-size: 1rem;
-  `
-  const StyledCardActions = styled(CardActions)`
-    justify-content: space-evenly;
-  `
-  const StyledPagination = styled(Pagination)`
-    width: fit-content;
-    margin: 0 auto;
-  `
-  const ItemBox = styled(Box)`
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    padding: 1rem;
-    margin: 0;
-    background-color: #fff;
-    border-radius: 8px;
-    justify-content: space-around;
-  `
+  width: 200px;
+  margin-top: 1rem;
+  cursor: pointer;
+  @media screen and (max-width:450px) { 
+      width: 170px;
+      height: 300px;
+  }
+`
+const StyledStack = styled(Stack)`
+  width: fit-content;
+  margin: 2rem auto;
+  @media screen and (max-width:450px) { 
+      width: 88%;
+      margin: 2rem auto;
+      justify-content: space-around;
+  }
+`
+const ModalLinkBox = styled(Box)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)!important;
+  width: 80%;
+  background-color: #fff;
+  border: 2px solid #000;
+  box-shadow: 24px;
+  padding: 2rem;
+  @media screen and (min-width:1024px) { 
+      width: 500px;
+      text-align: center;
+  }
+`
+const StyledBox = styled(Box)`
+  background-color: 'grey';
+  color: 'grey';
+  border: '1px solid';
+  border-color: 'grey';
+  border-radius: 2rem;
+  font-size: '0.875rem';
+  font-weight: '700';
+`
+const ListInitialButton = styled(Button)`
+  min-width: 30px!important;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  @media screen and (min-width:1024px) { 
+      min-width: 55px!important;
+      height: 55px;
+      margin-right: 1.5rem;
+  }
+`
+const NameTypo = styled(Typography)`
+  font-size: 1rem;
+`
+const StyledCardActions = styled(CardActions)`
+  justify-content: space-evenly;
+`
+const StyledPagination = styled(Pagination)`
+  width: fit-content;
+  margin: 0 auto;
+`
+const ItemBox = styled(Box)`
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  padding: 1rem;
+  margin: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  justify-content: space-around;
+`
+const ListTypography = styled(Typography)`
+  text-align: center;
+  width: 375px!important;
+`
+const styledModal = styled(Modal)`
+  width: 375px;
+`
 const Top = (state) => {
   const location = useLocation()
   const [item, setItem] = useState([])
@@ -100,6 +109,7 @@ const Top = (state) => {
   const allInitials = InitialArray.Initial;
   const dmmApiKey = process.env.REACT_APP_DMM_API_KEY
   const dmmAffKey = process.env.REACT_APP_DMM_AFF_ID
+  const navigate = useNavigate()
   const [selectedInitial,SetselectedInitial] = useState(location.state.requestInitial)
   const handleChange = (event, value) => {
     //ページネーション処理
@@ -144,6 +154,9 @@ const Top = (state) => {
       <StyledBox />
     );
   }
+  function pagenateProduction(item) {
+    navigate(`/Productions`, { state: { item: item } })
+  }
   const itemData = item.map((item, index) => {
     let image = ('imageURL' in item) ? item.imageURL.large : NoImage
       return (
@@ -160,7 +173,11 @@ const Top = (state) => {
             </NameTypo>
           </CardContent>
           <CardActions>
-            <Button color='primary' variant='outlined' size="small">作品</Button>
+          {item.listURL ? (
+            <Button color='primary' variant='outlined' size="small" onClick={() => pagenateProduction(item)}>作品</Button>
+          ) : (
+            <Button color='primary' disabled='true' variant='outlined' size="small" onClick={() => pagenateProduction(item)}>作品</Button>
+          )}
             <Button size="small" color='success' variant='outlined'>詳細</Button>
           </CardActions>
         </StyledCard>
@@ -176,14 +193,14 @@ const Top = (state) => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-            <ModalLinkBox>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                頭文字検索
-              </Typography>
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                {ListInitial}
-              </Typography>
-            </ModalLinkBox>
+          <ModalLinkBox>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              頭文字検索
+            </Typography>
+            <ListTypography id="modal-modal-description" sx={{ mt: 2 }}>
+              {ListInitial}
+            </ListTypography>
+          </ModalLinkBox>
         </Modal>
       </StyledStack>
       <StyledPagination count={totalCount} page={page} onChange={handleChange} variant="outlined" color="secondary" />
